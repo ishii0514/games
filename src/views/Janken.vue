@@ -6,21 +6,32 @@
       >
     <v-card>
       <v-card-title>
-        Janken
+        AI Janken
       </v-card-title>
       <v-card-text>
-        {{signal}}
-      </v-card-text>      
-      <v-card-text>
-        わたし:{{myHand}}
+        AIがあなたの手を学習します。
       </v-card-text>
       <v-card-text>
-        あなた:{{yourHand}}
+        <transition name="fade">
+          <div v-if="start">じゃーんけーん</div>
+          <div v-else>ぽん！</div>
+        </transition>
       </v-card-text>
-      <v-divider class="mx-4"></v-divider>      
-      <v-card-text>
+      <v-img
+          hight="100"
+          width="100"
+          v-bind:style="style"
+          v-bind:src="myHandImg"
+        ></v-img>
+      <v-divider class="mx-4"></v-divider>  
+      <v-img
+          hight="100"
+          width="100"
+          v-bind:src="yourHandImg"
+        ></v-img>
+      <v-card-title>
         {{result}}
-      </v-card-text>
+      </v-card-title>
       <v-divider class="mx-4"></v-divider>      
       <v-card-actions>
         <v-btn depressed outlined color="primary" text @click="goo">ぐー</v-btn>
@@ -35,7 +46,7 @@
       >
       <v-card>
         <v-card-text>
-        {{wins}}勝{{loses}}敗{{draws}}分
+        AI: {{loses}}勝{{wins}}敗{{draws}}分
       <v-list-item-group
         color="primary"
       >
@@ -48,7 +59,7 @@
           </v-list-item-content>
         </v-list-item>
       </v-list-item-group>
-              </v-card-text>
+      </v-card-text>
       </v-card>
       </v-col>
     </v-row>
@@ -57,7 +68,6 @@
 
 <script>
 export default {
-  // TODO 画像を入れる。
   // TODO 見た目を揃える。ぽん！にアクションつける。結果も派手にする。
   // TODO コード綺麗に。
 
@@ -66,9 +76,7 @@ export default {
             myHand: "",
             yourHand:"",
             history:[],
-            yourWin:0,
-            signal: "じゃーんけーん",
-            result:""
+            result:"",
         }
     },
     computed: {
@@ -84,7 +92,20 @@ export default {
       },
       reverseHistory() {
         return this.history.slice().reverse();
-    },
+      },
+      yourHandImg(){
+        return this.getHandImg(this.yourHand)
+      },
+      myHandImg(){
+        return this.getHandImg(this.myHand)
+      },
+      style(){
+        return { transform:"rotate(0.5turn)"}
+      },
+      start(){
+        return this.history.length == 0;
+      }
+
     },
     methods: {
       goo() {
@@ -101,15 +122,24 @@ export default {
         this.myHand = this.calcHand()
         this.result = this.calcResult()
         this.history.push([this.myHand,this.yourHand, this.result])
-        this.signal="ぽん！"
       },
       reset(){
         this.yourHand =""
         this.myHand = ""
         this.result = ""
         this.history = []
-        this.signal="じゃーんけーん"
-        this.yourWin=0
+      },
+      getHandImg(value){
+        if (value == "ぐー"){
+          return require("@/assets/janken_gu.png")
+        }
+        if (value == "ちょき"){
+          return require("@/assets/janken_choki.png")
+        }
+        if (value== "ぱー"){
+          return require("@/assets/janken_pa.png")
+        }
+        return "";
       },
       calcHand(){
         var n =7
@@ -176,3 +206,23 @@ export default {
     }
 };
 </script>
+<style scoped>
+.fade-enter{
+  opacity: 0;
+}
+.fade-enter-active{
+  transition:opacity .5s;
+}
+.fade-enter-to{
+  opacity: 1;
+}
+.fade-leave{
+  opacity:1
+}
+.fade-leave-active{
+  transition:opacity .5s;
+}
+.fade-leave-to{
+  opacity:0
+}
+</style>
