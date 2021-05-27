@@ -9,7 +9,7 @@
         AI Janken
       </v-card-title>
       <v-card-text>
-        AIがあなたの手を学習します。
+        AIがあなたの手を学習してどんどん強くなります。
       </v-card-text>
       <v-card-text>
         <transition name="fade">
@@ -18,15 +18,17 @@
         </transition>
       </v-card-text>
       <v-img
-          hight="100"
-          width="100"
+          max-height="80px"
+          max-width="100px"
+          contain
           v-bind:style="style"
           v-bind:src="myHandImg"
         ></v-img>
       <v-divider class="mx-4"></v-divider>  
       <v-img
-          hight="100"
-          width="100"
+          max-height="80px"
+          max-width="100px"
+          contain
           v-bind:src="yourHandImg"
         ></v-img>
       <v-card-title>
@@ -46,7 +48,7 @@
       >
       <v-card>
         <v-card-text>
-        AI: {{loses}}勝{{wins}}敗{{draws}}分
+        あなたの成績: {{wins}}勝{{loses}}敗{{draws}}分
       <v-list-item-group
         color="primary"
       >
